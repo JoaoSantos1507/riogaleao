@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel de Partidas</title>
+  <style>
+    body {
+      margin: 0;
+      /* --- ALTERAÇÃO CSS: Fonte --- */
+      /* Mudando para uma fonte mais robusta e comum, como na foto */
+      font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+      background-color: #0d1a26;
+      color: white;
+      overflow: hidden;
+    }
+
+    header {
+      background: #004d9d; 
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between; 
+      border-bottom: 2px solid #333;
+    }
+
+    .header-title {
+      display: flex;
+      align-items: center;
+    }
+
+    .airplane-icon {
+      width: 36px;
+      height: 36px;
+      margin-right: 15px;
+      fill: #fff;
+    }
+
+    .header-title h1 {
+      /* --- ALTERAÇÃO CSS: Tamanho da Fonte --- */
+      font-size: 30px; /* Aumentado de 28px */
+      margin: 0;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    #clock {
+      /* --- ALTERAÇÃO CSS: Tamanho da Fonte --- */
+      font-size: 28px; /* Aumentado de 26px */
+      font-weight: bold;
+      color: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    thead {
+      background-color: #001f3f;
+      border-bottom: 2px solid #555;
+    }
+
+    th, td {
+      /* --- ALTERAÇÃO CSS: Tamanho da Fonte --- */
+      padding: 14px 10px;
+      text-align: left;
+      font-size: 24px; /* Aumentado de 22px */
+      font-weight: bold;
+      vertical-align: middle;
+    }
+
+    th {
+      color: #fff;
+      text-transform: uppercase;
+      /* --- ALTERAÇÃO CSS: Tamanho da Fonte --- */
+      font-size: 20px; /* Aumentado de 18px */
+    }
+    
+    /* Ajustando colunas para o logo maior */
+    th:nth-child(1), td:nth-child(1) { width: 20%; text-align: center;} /* Airline (um pouco maior) */
+    th:nth-child(2), td:nth-child(2) { width: 10%; } /* Time */
+    th:nth-child(3), td:nth-child(3) { width: 20%; } /* To/Via */
+    th:nth-child(4), td:nth-child(4) { width: 10%; } /* Flight */
+    th:nth-child(5), td:nth-child(5) { width: 10%; text-align: center;} /* Check-in */
+    th:nth-child(6), td:nth-child(6) { width: 30%; } /* Status (um pouco menor) */
+
+
+    tbody tr {
+      border-bottom: 1px solid #222;
+    }
+    
+    /* --- ALTERAÇÃO CSS: Tamanho do Logo --- */
+    .logo-cell img {
+      width: 120px;  /* Aumentado de 100px */
+      height: 40px;  /* Aumentado de 36px */
+      background: white;
+      padding: 2px;    /* Diminuído de 4px (para preencher mais) */
+      border-radius: 4px;
+      object-fit: contain;
+    }
+
+    .destination {
+      color: yellow;
+      font-weight: bold;
+    }
+    
+    .gate {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .status-text {
+      font-weight: bold;
+      color: #ccc;
+    }
+    
+    .boarding { color: #ffff00; }
+    .delayed { color: #ff0000; }
+    .cancelled { color: #ff4444; }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-title">
+      <svg class="airplane-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M2.5 19H21.5V21H2.5V19M21.03 16.5L12.5 12.25V3.5C12.5 2.67 11.83 2 11 2C10.17 2 9.5 2.67 9.5 3.5V12.25L1 16.5V14.5L9.5 10.25V5.5H12.5V10.25L21.03 14.5V16.5Z"/>
+      </svg>
+      <h1>Departures</h1>
+    </div>
+    
+    <div id="clock">--:--:--</div>
+  </header>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Airline</th>
+        <th>Time</th>
+        <th>To/Via</th>
+        <th>Flight</th>
+        <th>Check-in</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="flight-body"></tbody>
+  </table>
+
+  <script>
+    
+    const flights = [
+      { time: "18:25", logo: "latam", destination: "Guarulhos", flight: "3349", gate: "G", status: "Check in c AM852", class: "" },
+      { time: "18:35", logo: "latam", destination: "Vitoria", flight: "3688", gate: "G", status: "Check in c AR805", class: "" },
+      { time: "18:45", logo: "azul", destination: "Recife", flight: "2652", gate: "B", status: "Embarque Imediato", class: "boarding" },
+      { time: "19:00", logo: "gol", destination: "Porto Alegre", flight: "1811", gate: "D", status: "Check in c AF2068", class: "" },
+      { time: "19:00", logo: "latam", destination: "Santiago", flight: "755", gate: "B", status: "Check in c", class: "" },
+      { time: "19:00", logo: "latam", destination: "Santiago", flight: "755", gate: "B", status: "Check in c", class: "" }, 
+      { time: "19:20", logo: "latam", destination: "Brasilia", flight: "3473", gate: "G", status: "Check in c AR8258", class: "" },
+      { time: "19:45", logo: "latam", destination: "Guarulhos", flight: "3875", gate: "G", status: "Check in c QR5134", class: "" },
+      { time: "19:45", logo: "gol", destination: "Vitoria", flight: "2040", gate: "D", status: "Atrasado", class: "delayed" },
+      { time: "20:05", logo: "gol", destination: "Guarulhos", flight: "1929", gate: "D", status: "Check in c AV4746", class: "" },
+      { time: "20:10", logo: "gol", destination: "Buenos Aires", flight: "3815", gate: "B", status: "Check in c JA3815", class: "" },
+      { time: "20:15", logo: "gol", destination: "Navegantes", flight: "1968", gate: "D", status: "Check in c KL9348", class: "" },
+      { time: "20:30", logo: "azul", destination: "Campinas", flight: "4005", gate: "-", status: "Cancelado", class: "cancelled" },
+      { time: "20:45", logo: "latam", destination: "Lima", flight: "1234", gate: "C", status: "Última Chamada", class: "boarding" },
+      { time: "21:00", logo: "gol", destination: "Salvador", flight: "1550", gate: "D", status: "Check in c", class: "" },
+      { time: "21:15", logo: "azul", destination: "Recife", flight: "4051", gate: "A", status: "Embarque Imediato", class: "boarding" },
+    ];
+
+    const logos = {
+      azul: "https://upload.wikimedia.org/wikipedia/commons/5/52/Logo_da_Azul_Linhas_A%C3%A9reas_Brasileiras.svg",
+      latam: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4mqQkOmScOLxv8xmgESO3LV5hYmdTL5ao6w&s",
+      gol: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1MduLD3BMOnAFv0qjmgI4qvei89O9CqiWmg&s",
+      avianca: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Avianca_logo_red.svg/2560px-Avianca_logo_red.svg.png"
+    };
+    
+    let index = 0;
+    const FLIGHTS_PER_PAGE = 12; 
+    const tbody = document.getElementById("flight-body"); 
+
+    function renderFlights() {
+      tbody.innerHTML = ''; 
+      
+      for (let i = 0; i < FLIGHTS_PER_PAGE; i++) {
+        const v = flights[(index + i) % flights.length];
+        
+        const row = `
+          <tr>
+            <td class="logo-cell"><img src="${logos[v.logo]}" alt="${v.logo}"></td>
+            <td>${v.time}</td>
+            <td class="destination">${v.destination}</td>
+            <td>${v.flight}</td>
+            <td class="gate">${v.gate}</td>
+            <td class="status-text ${v.class}">${v.status}</td>
+          </tr>`;
+        tbody.innerHTML += row;
+      }
+
+      index = (index + FLIGHTS_PER_PAGE) % flights.length;
+    }
+
+    function updateClock() {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString("en-GB"); 
+      document.getElementById("clock").textContent = timeStr;
+    }
+
+    setInterval(renderFlights, 7000); 
+    setInterval(updateClock, 1000); 
+
+    renderFlights();
+    updateClock();
+  </script>
+</body>
+</html>
