@@ -4,18 +4,26 @@
   <meta charset="UTF-8">
   <title>Painel de Partidas</title>
   <style>
+  
     body {
       margin: 0;
-      /* --- ALTERAÇÃO CSS: Fonte --- */
-      /* Mudando para uma fonte mais robusta e comum, como na foto */
-      font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-      background-color: #0d1a26;
+      /* Fonte alterada para priorizar Helvetica e ser bold */
+      font-family: Helvetica, "Helvetica Neue", Arial, sans-serif;
+      font-weight: bold; 
+      
+      background-color: #0d1a26; /* Fundo escuro */
       color: white;
-      overflow: hidden;
+      overflow: hidden; /* Evita barras de rolagem */
+      
+      /* --- CONTROLO DE TAMANHO DE FONTE --- */
+      /* Altere o valor abaixo para ajustar o tamanho de 
+         todas as fontes no painel de forma proporcional. */
+      --font-size-base-tabela: 26px;
+      /* --- FIM DO CONTROLO --- */
     }
 
     header {
-      background: #004d9d; 
+      background: #51e1ce; /* Azul escuro do cabeçalho */
       padding: 10px 20px;
       display: flex;
       align-items: center;
@@ -28,96 +36,136 @@
       align-items: center;
     }
 
-    .airplane-icon {
-      width: 36px;
-      height: 36px;
+    /* Estilo para o novo ícone do cabeçalho */
+    #header-icon {
+      width: 40px;
+      height: 40px;
       margin-right: 15px;
-      fill: #fff;
+      /* Filtro CSS para transformar o ícone preto em branco */
+      filter: invert(1);
     }
 
     .header-title h1 {
-      /* --- ALTERAÇÃO CSS: Tamanho da Fonte --- */
-      font-size: 30px; /* Aumentado de 28px */
+      /* Fonte agora controlada pela variável (era 32px) */
+      font-size: calc(var(--font-size-base-tabela) + 6px); 
       margin: 0;
       text-transform: uppercase;
       color: #fff;
     }
 
     #clock {
-      /* --- ALTERAÇÃO CSS: Tamanho da Fonte --- */
-      font-size: 28px; /* Aumentado de 26px */
-      font-weight: bold;
+      /* Fonte agora controlada pela variável (era 30px) */
+      font-size: calc(var(--font-size-base-tabela) + 4px);
+      font-weight: bold; /* Manter bold aqui reforça o estilo */
       color: #fff;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 10px;
+      margin-top: 5px; /* Menos espaço no topo */
     }
 
     thead {
-      background-color: #001f3f;
+      background-color: #001f3f; /* Fundo do cabeçalho da tabela */
       border-bottom: 2px solid #555;
     }
 
     th, td {
-      /* --- ALTERAÇÃO CSS: Tamanho da Fonte --- */
       padding: 14px 10px;
       text-align: left;
-      font-size: 24px; /* Aumentado de 22px */
-      font-weight: bold;
+      /* Fonte agora controlada pela variável (era 26px) */
+      font-size: var(--font-size-base-tabela); 
+      font-weight: bold; /* Manter bold aqui reforça o estilo */
       vertical-align: middle;
+      white-space: nowrap; /* Evita que o texto quebre linha */
     }
 
     th {
       color: #fff;
       text-transform: uppercase;
-      /* --- ALTERAÇÃO CSS: Tamanho da Fonte --- */
-      font-size: 20px; /* Aumentado de 18px */
+      /* Fonte agora controlada pela variável (era 22px) */
+      font-size: calc(var(--font-size-base-tabela) - 4px);
     }
     
-    /* Ajustando colunas para o logo maior */
-    th:nth-child(1), td:nth-child(1) { width: 20%; text-align: center;} /* Airline (um pouco maior) */
-    th:nth-child(2), td:nth-child(2) { width: 10%; } /* Time */
-    th:nth-child(3), td:nth-child(3) { width: 20%; } /* To/Via */
-    th:nth-child(4), td:nth-child(4) { width: 10%; } /* Flight */
+    /* Cor separada para cabeçalhos DESTINO e CHECK-IN */
+    th:nth-child(3) { /* Coluna Destino */
+      color: yellow;
+    }
+    th:nth-child(5) { /* Coluna Check-in */
+      color: yellow;
+    }
+    
+    
+    /* * Ajuste das larguras das colunas para 7 colunas, 
+     * baseado nas proporções da imagem 
+    */
+    th:nth-child(1), td:nth-child(1) { width: 15%; text-align: center;} /* Cia */
+    th:nth-child(2), td:nth-child(2) { width: 10%; } /* Hora */
+    th:nth-child(3), td:nth-child(3) { width: 22%; } /* Destino */
+    th:nth-child(4), td:nth-child(4) { width: 10%; } /* Voo */
     th:nth-child(5), td:nth-child(5) { width: 10%; text-align: center;} /* Check-in */
-    th:nth-child(6), td:nth-child(6) { width: 30%; } /* Status (um pouco menor) */
+    th:nth-child(6), td:nth-child(6) { width: 18%; } /* Status */
+    th:nth-child(7), td:nth-child(7) { width: 15%; } /* Parceria */
 
 
     tbody tr {
       border-bottom: 1px solid #222;
     }
     
-    /* --- ALTERAÇÃO CSS: Tamanho do Logo --- */
+    /* Logos maiores e com fundo branco, como na imagem */
     .logo-cell img {
-      width: 120px;  /* Aumentado de 100px */
-      height: 40px;  /* Aumentado de 36px */
+      width: 130px;
+      height: 42px;
       background: white;
-      padding: 2px;    /* Diminuído de 4px (para preencher mais) */
+      padding: 4px;
       border-radius: 4px;
-      object-fit: contain;
+      object-fit: contain; /* Padrão (bom para Azul/LATAM) */
+    }
+    
+    /* Classe de correção para logos (GOL, Avianca) 
+       que têm padding dentro do próprio ficheiro de imagem */
+    .logo-cell img.logo-fix {
+      object-fit: cover; /* Faz zoom na imagem para preencher o espaço */
+      padding: 0;        /* Remove o padding CSS para dar mais espaço */
     }
 
+    /* Cor amarela para o destino */
     .destination {
       color: yellow;
       font-weight: bold;
     }
     
     .gate {
-      font-size: 24px;
+      /* O tamanho da fonte é herdado de 'th, td', 
+         pelo que não precisamos de o definir aqui */
       font-weight: bold;
+    }
+
+    /* Estilo para a seta amarela do check-in */
+    .arrow {
+      color: yellow;
+    }
+    
+    .arrow-right {
+      margin-left: 8px;
+    }
+    
+    .arrow-left {
+      margin-right: 8px;
     }
 
     .status-text {
       font-weight: bold;
-      color: #ccc;
+      color: #ccc; /* Cor padrão */
     }
     
-    .boarding { color: #ffff00; }
-    .delayed { color: #ff0000; }
-    .cancelled { color: #ff4444; }
+    /* Novas classes de status baseadas na imagem */
+    .status-aberto { color: #00ffaa; } /* Verde-claro/Ciano */
+    .status-chamada { color: #ff4444; } /* Vermelho */
+    .status-embarcando { color: #ffff00; } /* Amarelo */
+    .status-atrasado { color: #ff4444; } /* Vermelho */
+    .status-cancelado { color: #ff4444; } /* Vermelho */
 
   </style>
 </head>
@@ -125,10 +173,9 @@
 
   <header>
     <div class="header-title">
-      <svg class="airplane-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path d="M2.5 19H21.5V21H2.5V19M21.03 16.5L12.5 12.25V3.5C12.5 2.67 11.83 2 11 2C10.17 2 9.5 2.67 9.5 3.5V12.25L1 16.5V14.5L9.5 10.25V5.5H12.5V10.25L21.03 14.5V16.5Z"/>
-      </svg>
-      <h1>Departures</h1>
+      <img id="header-icon" src="https://cdn4.iconfinder.com/data/icons/doodle-5/150/plane-256.png" alt="Ícone Avião">
+      
+      <h1>Partidas</h1>
     </div>
     
     <div id="clock">--:--:--</div>
@@ -137,81 +184,190 @@
   <table>
     <thead>
       <tr>
-        <th>Airline</th>
-        <th>Time</th>
-        <th>To/Via</th>
-        <th>Flight</th>
+        <th>Cia</th>
+        <th>Hora</th>
+        <th>Destino</th>
+        <th>Voo</th>
         <th>Check-in</th>
         <th>Status</th>
+        <th>Parceria</th>
       </tr>
     </thead>
-    <tbody id="flight-body"></tbody>
+    <tbody id="flight-body">
+      </tbody>
   </table>
 
   <script>
     
-    const flights = [
-      { time: "18:25", logo: "latam", destination: "Guarulhos", flight: "3349", gate: "G", status: "Check in c AM852", class: "" },
-      { time: "18:35", logo: "latam", destination: "Vitoria", flight: "3688", gate: "G", status: "Check in c AR805", class: "" },
-      { time: "18:45", logo: "azul", destination: "Recife", flight: "2652", gate: "B", status: "Embarque Imediato", class: "boarding" },
-      { time: "19:00", logo: "gol", destination: "Porto Alegre", flight: "1811", gate: "D", status: "Check in c AF2068", class: "" },
-      { time: "19:00", logo: "latam", destination: "Santiago", flight: "755", gate: "B", status: "Check in c", class: "" },
-      { time: "19:00", logo: "latam", destination: "Santiago", flight: "755", gate: "B", status: "Check in c", class: "" }, 
-      { time: "19:20", logo: "latam", destination: "Brasilia", flight: "3473", gate: "G", status: "Check in c AR8258", class: "" },
-      { time: "19:45", logo: "latam", destination: "Guarulhos", flight: "3875", gate: "G", status: "Check in c QR5134", class: "" },
-      { time: "19:45", logo: "gol", destination: "Vitoria", flight: "2040", gate: "D", status: "Atrasado", class: "delayed" },
-      { time: "20:05", logo: "gol", destination: "Guarulhos", flight: "1929", gate: "D", status: "Check in c AV4746", class: "" },
-      { time: "20:10", logo: "gol", destination: "Buenos Aires", flight: "3815", gate: "B", status: "Check in c JA3815", class: "" },
-      { time: "20:15", logo: "gol", destination: "Navegantes", flight: "1968", gate: "D", status: "Check in c KL9348", class: "" },
-      { time: "20:30", logo: "azul", destination: "Campinas", flight: "4005", gate: "-", status: "Cancelado", class: "cancelled" },
-      { time: "20:45", logo: "latam", destination: "Lima", flight: "1234", gate: "C", status: "Última Chamada", class: "boarding" },
-      { time: "21:00", logo: "gol", destination: "Salvador", flight: "1550", gate: "D", status: "Check in c", class: "" },
-      { time: "21:15", logo: "azul", destination: "Recife", flight: "4051", gate: "A", status: "Embarque Imediato", class: "boarding" },
+    // URLs dos logos (agora usando ficheiros locais da pasta 'img')
+    const logos = {
+      azul: "img/azul.png",
+      latam: "img/latam.png",
+      gol: "img/gol.png",
+      avianca: "img/avianca.png"
+    };
+
+    // --- Lógica de Geração de Dados Fictícios ---
+
+    // Arrays de dados para randomização
+    const Cias = ["latam", "gol", "azul", "avianca"]; 
+    const Destinos = [
+      "Porto Seguro", "João Pessoa", "Cidade do Panamá", "Bogotá", "Curitiba", 
+      "Guarulhos", "Porto Alegre", "Campinas", "Brasília", "Recife", 
+      "Salvador", "Santiago", "Vitória", "Navegantes", "Lima"
+    ];
+    const Gates = ["A", "B", "C", "D", "E", "F", "G", "H"];
+    const Arrows = ["->", "<-"]; 
+    const Parcerias = [
+      "AR8003", "KL9418", "TP5337", "DL6112", "TP6027", "CM7113", 
+      "TP4021", "TP5682", "AF2068", "QR5134", "AV4746", "JA3815"
+    ];
+    
+    // Status com a chave de classe CSS e o texto a ser exibido
+    const Statuses = [
+      { key: "aberto", text: "Check-in aberto" },
+      { key: "aberto", text: "Check-in abr" },
+      { key: "chamada", text: "1ma Chamada" },
+      { key: "embarcando", text: "Embarque Imediato" },
+      { key: "atrasado", text: "Atrasado" }
     ];
 
-    const logos = {
-      azul: "https://upload.wikimedia.org/wikipedia/commons/5/52/Logo_da_Azul_Linhas_A%C3%A9reas_Brasileiras.svg",
-      latam: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4mqQkOmScOLxv8xmgESO3LV5hYmdTL5ao6w&s",
-      gol: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1MduLD3BMOnAFv0qjmgI4qvei89O9CqiWmg&s",
-      avianca: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Avianca_logo_red.svg/2560px-Avianca_logo_red.svg.png"
-    };
+    // Função para pegar um item aleatório de um array
+    function getRandom(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
     
-    let index = 0;
-    const FLIGHTS_PER_PAGE = 12; 
+    /**
+     * Gera uma lista de voos fictícios baseados na hora atual.
+     */
+    function generateFlightData() {
+      // Usamos o console.log para ver no browser
+      // sempre que a lista de voos é atualizada
+      console.log("Gerando nova lista de voos..."); 
+      const generatedFlights = [];
+      const now = new Date();
+      
+      // Clona a data atual e adiciona 3 minutos (para o primeiro voo)
+      let flightTime = new Date(now.getTime() + 3 * 60000); 
+
+      // Gerar 25 voos fictícios
+      for (let i = 0; i < 25; i++) {
+        // Adiciona entre 3 e 8 minutos para cada novo voo
+        const minutesToAdd = 3 + Math.floor(Math.random() * 5);
+        flightTime = new Date(flightTime.getTime() + minutesToAdd * 60000);
+
+        // Formata a hora: HH:MM
+        const timeStr = flightTime.getHours().toString().padStart(2, '0') + ":" + 
+                        flightTime.getMinutes().toString().padStart(2, '0');
+        
+        // Escolhe um status aleatório
+        const status = getRandom(Statuses);
+        
+        // Cria o objeto do voo
+        generatedFlights.push({
+          time: timeStr,
+          logo: getRandom(Cias),
+          destination: getRandom(Destinos),
+          flight: (1000 + Math.floor(Math.random() * 8999)).toString(), // Voo de 4 dígitos
+          gate: getRandom(Gates),
+          arrowDirection: getRandom(Arrows), 
+          status: status.text,
+          class: "status-" + status.key, // Classe CSS (ex: "status-aberto")
+          parceria: getRandom(Parcerias)
+        });
+      }
+      return generatedFlights;
+    }
+
+    // --- Lógica de Renderização e Atualização ---
+
+    let flights = []; // Array global de voos
+    let index = 0;    // Índice para paginação
+    const FLIGHTS_PER_PAGE = 12; // Quantos voos mostrar por vez
     const tbody = document.getElementById("flight-body"); 
 
+    /**
+     * Atualiza a lista global de voos.
+     */
+    function updateFlightList() {
+      flights = generateFlightData();
+    }
+
+    /**
+     * Renderiza (desenha) a página atual de voos na tabela.
+     */
     function renderFlights() {
-      tbody.innerHTML = ''; 
+      tbody.innerHTML = ''; // Limpa a tabela
       
       for (let i = 0; i < FLIGHTS_PER_PAGE; i++) {
+        // Usa o módulo (%) para "dar a volta" na lista quando chega ao fim
         const v = flights[(index + i) % flights.length];
         
+        // Determina o HTML para a célula do Check-in
+        let checkInCellHTML = '';
+        if (v.arrowDirection === '->') {
+          checkInCellHTML = `${v.gate} <span class="arrow arrow-right">${v.arrowDirection}</span>`;
+        } else {
+          checkInCellHTML = `<span class="arrow arrow-left">${v.arrowDirection}</span> ${v.gate}`;
+        }
+        
+        // Adiciona uma classe especial para logos que precisam de "zoom"
+        let logoClass = ""; // Classe padrão (vazia)
+        if (v.logo === 'gol' || v.logo === 'avianca') {
+          logoClass = "logo-fix"; // Classe de correção
+        }
+
+        // Template string do HTML para a nova linha (com 7 colunas)
         const row = `
           <tr>
-            <td class="logo-cell"><img src="${logos[v.logo]}" alt="${v.logo}"></td>
+            <td class="logo-cell"><img src="${logos[v.logo]}" alt="${v.logo}" class="${logoClass}"></td>
             <td>${v.time}</td>
             <td class="destination">${v.destination}</td>
             <td>${v.flight}</td>
-            <td class="gate">${v.gate}</td>
+            <td class="gate">${checkInCellHTML}</td>
             <td class="status-text ${v.class}">${v.status}</td>
+            <td>${v.parceria}</td>
           </tr>`;
         tbody.innerHTML += row;
       }
 
+      // Avança o índice para a próxima "página" de voos
       index = (index + FLIGHTS_PER_PAGE) % flights.length;
     }
 
+    /**
+     * Atualiza o relógio no formato HH:MM:SS.
+     */
     function updateClock() {
       const now = new Date();
-      const timeStr = now.toLocaleTimeString("en-GB"); 
+      // Formato PT-BR para Hora, Minuto e Segundo
+      const timeStr = now.toLocaleTimeString("pt-BR", { 
+          hour: '2-digit', 
+          minute: '2-digit', 
+          second: '2-digit' 
+      });
+      
       document.getElementById("clock").textContent = timeStr;
     }
 
+    // --- Inicialização e Intervalos ---
+
+    // Intervalo para rolar a página de voos (a cada 7 segundos)
     setInterval(renderFlights, 7000); 
+    
+    // Intervalo para atualizar o relógio (a cada 1 segundo)
     setInterval(updateClock, 1000); 
 
-    renderFlights();
-    updateClock();
+    // --- ALTERAÇÃO FINAL AQUI ---
+    // Intervalo para gerar uma nova lista de voos (a cada 1 minuto)
+    // Isto garante que o painel está sempre atualizado e não 
+    // mostra voos que já estão muito no passado.
+    setInterval(updateFlightList, 60000); // 60.000 ms = 1 minuto
+
+    // Execução inicial para carregar tudo imediatamente
+    updateFlightList(); // Gera os dados dos voos
+    renderFlights();    // Mostra a primeira página de voos
+    updateClock();      // Mostra o relógio
   </script>
 </body>
 </html>
